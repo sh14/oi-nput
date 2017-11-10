@@ -8,11 +8,7 @@ Author: Alexei Isaenko
 Author URI: http://sh14.ru
 License: GPL2
 Tags: input, textarea, select, option, password, hidden, checkbox, radiobox
-
-date: 07.08.2015 - id added
-date: 30.01.2016 - form tag exclude (1.2)
-date: 19.04.2016 - функция замены псевдопеременных на значения (1.3)
-date: 01.08.2017 - функция шаблонов (1.4)
+GitHub Plugin URI: https://github.com/sh14/oi-nput
 */
 
 if ( ! function_exists( 'esc_attr' ) ) {
