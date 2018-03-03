@@ -656,6 +656,26 @@ function get_oitemplate( $template, $atts ) {
 /**
  * Making HTML from array with classes by BEM
  *
+		// bem array
+		$user_links = get_html( [
+		'tag'     => 'div',
+		'atts'    => [
+		'class' => '&__contacts',
+		],
+		'content' => [
+		[
+		'tag'     => 'h3',
+		'atts'    => ['class' => '&__contacts-title',],
+		'content' => __( 'Bio' ),
+		],
+		[
+		'tag'     => 'ul',
+		'atts'    => ['class' => '&__contacts-list',],
+		'content' => implode( "\n", $user_links ),
+		],
+		],
+		], 'profile' );
+*
  * @param        $atts
  * @param string $base_class
  *
@@ -734,7 +754,11 @@ function get_html( $atts, $base_class = '' ) {
 
 					// если элемент является массивом, вероятно это описание вложенного элемента или набора вложений
 					if ( is_array( $value ) ) {
-						$object[ $key ][] = get_html( $value, $base_class );
+
+						foreach ( $value as $index => $val ) {
+							pr($val);
+							$object[ $key ][] = get_html( $value, $base_class );
+						}
 					} else {
 						$object[ $key ][] = $value;
 					}
