@@ -267,11 +267,16 @@ if ( ! function_exists( 'oinput' ) ) {
 				$atts['id'] = str_replace( '[', '-', $atts['id'] );
 			}
 
+			// set class for label
+			if ( ! empty( $atts['label_class'] ) ) {
+				$atts['label_class'] = 'class="' . esc_attr( $atts['label_class'] ) . '"';
+			}
+
 			// list of labels
 			$attributes = array( 'before', 'after', );
 			foreach ( $attributes as $key ) {
 				if ( ! empty( $atts[ $key ] ) ) {
-					$atts[ $key ] = '<label for="' . esc_attr( $atts['id'] ) . '">' . esc_html( $atts[ $key ] ) . '</label>';
+					$atts[ $key ] = '<label ' . $atts['label_class'] . ' for="' . esc_attr( $atts['id'] ) . '">' . esc_html( $atts[ $key ] ) . '</label>';
 				}
 			}
 
@@ -646,4 +651,140 @@ function get_oitemplate( $template, $atts ) {
 
 	// Вернем отрендеренный шаблон.
 	return ob_get_clean();
+}
+
+/**
+ * Making HTML from array with classes by BEM
+ *
+ * @param        $atts
+ * @param string $base_class
+ *
+ * @return string
+ */
+function get_html( $atts, $base_class = '' ) {
+	$atts = shortcode_atts( [
+		'tag'     => 'div',
+		'atts'    => [
+			'class' => '&',
+		],
+		'content' => '',
+	], $atts );
+
+	$mono   = [
+		'br',
+		'hr',
+		'input',
+		'meta',
+		'link',
+		'img',
+	];
+	$out    = '';
+	$object = [];
+
+	// перебор содержимого массива
+	foreach ( $atts as $key => $value ) {
+
+		// если ключи массива не ассоциативные
+		if ( is_numeric( $key ) ) {
+
+			// если элемент является массивом
+			if ( is_array( $value ) ) {
+
+				// необходимо сделать рекурсию
+				$out .= get_html( $value, $base_class );
+			} else {
+
+				// необходимо добавить значение в строку
+				$out .= $value;
+			}
+		} else {
+			// массив ассоциативный, идет разбор массива, как тега
+
+			switch ( $key ) {
+				case 'tag':
+					$object[ $key ][] = '<' . $value;
+					break;
+				case 'atts':
+					$object[ $key ][] = ' ';
+
+					// если значение является массивом
+					if ( is_array( $value ) ) {
+						$attributes = [];
+
+						// атрибуты выстраиваются в строку
+						foreach ( $value as $name => $val ) {
+
+							// преобразование массива со значениями в строку
+							if ( is_array( $val ) ) {
+								$val = implode( ' ', $val );
+							}
+
+							// змена символа & на базовый класс
+							$val = str_replace( '&', $base_class, $val );
+
+							$attributes[] = $name . '="' . $val . '"';
+						}
+
+						$object[ $key ][] = implode( ' ', $attributes );
+					} else {
+						$object[ $key ][] = $value;
+					}
+					break;
+				case 'content':
+
+					// если элемент является массивом, вероятно это описание вложенного элемента или набора вложений
+					if ( is_array( $value ) ) {
+						$object[ $key ][] = get_html( $value, $base_class );
+					} else {
+						$object[ $key ][] = $value;
+					}
+					break;
+			}
+		}
+	}
+
+	// если $out что-то содержит, следует вернуть данные
+	if ( ! empty( $out ) ) {
+		return $out;
+	}
+
+	if ( empty( $atts['atts'] ) ) {
+		$atts['atts'] = [];
+	}
+	// перебор элементов и дописывание закрывающих частей
+	foreach ( $atts as $key => $value ) {
+		switch ( $key ) {
+			case 'atts':
+				// закрытие открывающего тега, если
+				if ( ! in_array( $atts['tag'], $mono ) ) {
+					$object[ $key ][] = '>';
+				}
+				break;
+			case 'tag':
+				if ( in_array( $value, $mono ) ) {
+
+					$object[ 'end_' . $key ][] = ' />';
+				} else {
+					$object[ 'end_' . $key ][] = '</' . $value . '>';
+				}
+
+				break;
+		}
+	}
+
+	// порядок составления элементов
+	$order = [
+		'tag',
+		'atts',
+		'content',
+		'end_tag',
+	];
+	foreach ( $order as $key ) {
+		if ( ! empty( $object[ $key ] ) ) {
+			$out .= implode( '', $object[ $key ] );
+		}
+
+	}
+
+	return $out;
 }
