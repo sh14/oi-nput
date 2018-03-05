@@ -279,7 +279,7 @@ if ( ! function_exists( 'oinput' ) ) {
 			}
 
 			// list of labels
-			$attributes = array( 'before', 'after', );
+			$attributes = array( 'before', 'after', 'label', );
 			foreach ( $attributes as $key ) {
 				if ( ! empty( $atts[ $key ] ) ) {
 					$atts[ $key ] = '<label ' . $atts['label_class'] . ' for="' . esc_attr( $atts['id'] ) . '">' . esc_html( $atts[ $key ] ) . '</label>';
