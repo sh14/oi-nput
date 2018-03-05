@@ -87,8 +87,13 @@ function attributes_to_string( $array, $prefix = '' ) {
 
 		if ( ! is_array( $value ) ) {
 			$value = esc_attr( trim( $value ) );
+			if ( ! empty( $prefix ) ) {
+				$prefix .= '-';
+			}
 			// формирование и добавление в массив одного data
 			$data[] = $prefix . $key . '="' . $value . '"';
+		} else {
+			$data[] = attributes_to_string( $value, $key );
 		}
 
 	}
@@ -206,6 +211,7 @@ if ( ! function_exists( 'oinput' ) ) {
 			'placeholder'      => '',        // text example in a field
 			'hint'             => '',        // hint text after field
 			'class'            => '',        // element class
+			'label_class'      => '',        // label class
 			'style'            => '',        // element style
 			'data'             => '',        // data attribute as array
 			'attributes'       => '',        // you able to write what ever you want to see inside a field
@@ -359,11 +365,10 @@ if ( ! function_exists( 'oinput' ) ) {
 									if ( ! empty( $atts[ $key ] ) ) {
 
 										// преобразование всех data в строку
-										$atts[ $key ] = attributes_to_string( $atts[ $key ], 'data-' );
+										$atts[ $key ] = attributes_to_string( $atts[ $key ], $key );
 									}
 
 								} else if ( $key == 'attributes' ) {
-
 									// если содержимое что-то содержит
 									if ( ! empty( $atts[ $key ] ) ) {
 
@@ -391,9 +396,9 @@ if ( ! function_exists( 'oinput' ) ) {
 					}
 				}
 
-				if ( ! empty( $atts['hint'] ) ) {
-					$atts['hint'] = '<span class="help-block description">' . esc_html( $atts['hint'] ) . '</span>';
-				}
+				/*				if ( ! empty( $atts['hint'] ) ) {
+									$atts['hint'] = '<span class="help-block description">' . esc_html( $atts['hint'] ) . '</span>';
+								}*/
 
 				if ( $field_type != 'option' ) {
 					// формирование элемента
@@ -656,26 +661,26 @@ function get_oitemplate( $template, $atts ) {
 /**
  * Making HTML from array with classes by BEM
  *
-		// bem array
-		$user_links = get_html( [
-		'tag'     => 'div',
-		'atts'    => [
-		'class' => '&__contacts',
-		],
-		'content' => [
-		[
-		'tag'     => 'h3',
-		'atts'    => ['class' => '&__contacts-title',],
-		'content' => __( 'Bio' ),
-		],
-		[
-		'tag'     => 'ul',
-		'atts'    => ['class' => '&__contacts-list',],
-		'content' => implode( "\n", $user_links ),
-		],
-		],
-		], 'profile' );
-*
+ * // bem array
+ * $user_links = get_html( [
+ * 'tag'     => 'div',
+ * 'atts'    => [
+ * 'class' => '&__contacts',
+ * ],
+ * 'content' => [
+ * [
+ * 'tag'     => 'h3',
+ * 'atts'    => ['class' => '&__contacts-title',],
+ * 'content' => __( 'Bio' ),
+ * ],
+ * [
+ * 'tag'     => 'ul',
+ * 'atts'    => ['class' => '&__contacts-list',],
+ * 'content' => implode( "\n", $user_links ),
+ * ],
+ * ],
+ * ], 'profile' );
+ *
  * @param        $atts
  * @param string $base_class
  *
@@ -756,7 +761,7 @@ function get_html( $atts, $base_class = '' ) {
 					if ( is_array( $value ) ) {
 
 						foreach ( $value as $index => $val ) {
-							pr($val);
+							pr( $val );
 							$object[ $key ][] = get_html( $value, $base_class );
 						}
 					} else {
