@@ -263,7 +263,7 @@ if ( ! function_exists( 'oinput' ) ) {
 			$field_value = $atts['value'];
 		}
 
-		if ( $atts['name'] || $field_type == 'submit' || $field_type == 'html' ) {
+		if ( $atts['name'] || $field_type == 'submit' || $field_type == 'button' || $field_type == 'html' ) {
 			if ( empty( $atts['id'] ) ) {
 				$atts['id'] = $atts['name'];
 
@@ -431,6 +431,9 @@ if ( ! function_exists( 'oinput' ) ) {
 				case 'submit':
 					$tag = 'button';
 					break;
+				case 'button':
+					$tag = 'button';
+					break;
 				default:
 					$tag = 'input';
 					break;
@@ -517,6 +520,9 @@ if ( ! function_exists( 'oinput' ) ) {
 					$out = '<' . $tag . $atts['class'] . $atts['type'] . $atts['id'] . $atts['name'] . $atts['attributes'] . ' value="1" />';
 					break;
 				case 'submit':
+					$out = '<' . $tag . $atts['class'] . $atts['type'] . $atts['id'] . $atts['attributes'] . '>' . esc_html( $field_value ) . '</' . $tag . '>';
+					break;
+				case 'button':
 					$out = '<' . $tag . $atts['class'] . $atts['type'] . $atts['id'] . $atts['attributes'] . '>' . esc_html( $field_value ) . '</' . $tag . '>';
 					break;
 				case 'textarea':
