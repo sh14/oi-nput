@@ -824,4 +824,3 @@ function get_html( $atts, $base_class = '' ) {
 	return $out;
 }
 // eof
-//ssdf
