@@ -3,6 +3,8 @@ Plugin for making HTML forms via array.
 
 ## Changelog
 
+### 1.5
+* fixed: (07.07.2018) The code is given in accordance with the WordPress Codex
 ### 1.4
 * new: (01.08.2017) Template function.
 ### 1.3
