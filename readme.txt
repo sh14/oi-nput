@@ -4,7 +4,7 @@ Donate link: https://money.yandex.ru/topup/card/carddetails.xml?receiver=4100111
 Tags: html, form, input, textarea, select
 Requires at least: 3.2
 Tested up to: 4.8.3
-Stable tag: 1.4
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,8 @@ Plugin for making HTML forms via array.
 
 == Changelog ==
 
+= 1.5 =
+* fixed: (07.07.2018) The code is given in accordance with the WordPress Codex
 = 1.4 =
 * new: (01.08.2017) Template function.
 = 1.3 =
