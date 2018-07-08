@@ -78,20 +78,27 @@ function attributes_to_string( $array, $prefix = '' ) {
 	// начальное определение переменной
 	$data = array();
 
-	// проход по всем data
+	// проход по всем атрибутам
 	foreach ( $array as $key => $value ) {
 
 		if ( ! is_array( $key ) ) {
 			$key = trim( $key );
 		}
 
+		// если $value не является массивом
 		if ( ! is_array( $value ) ) {
+
+			// строка эскейпится
 			$value = esc_attr( trim( $value ) );
+
+			// если есть префикс
 			if ( ! empty( $prefix ) ) {
-				$prefix .= '-';
+				// формирование и добавление атрибута в массив
+				$data[] = $prefix .'-'. $key . '="' . $value . '"';
+			}else{
+				// формирование и добавление атрибута в массив
+				$data[] =  $key . '="' . $value . '"';
 			}
-			// формирование и добавление в массив одного data
-			$data[] = $prefix . $key . '="' . $value . '"';
 		} else {
 			$data[] = attributes_to_string( $value, $key );
 		}
