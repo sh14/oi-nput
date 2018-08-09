@@ -96,8 +96,8 @@ function attributes_to_string( $array, $prefix = '' ) {
 				// формирование и добавление атрибута в массив
 				$data[] =$prefix . '-'. $key . '="' . $value . '"';
 			}else{
-			// формирование и добавление атрибутав массив
-			$data[] = $key . '="' . $value . '"';
+				// формирование и добавление атрибутав массив
+				$data[] = $key . '="' . $value . '"';
 			}
 		} else {
 			$data[] = attributes_to_string( $value, $key );
@@ -418,16 +418,16 @@ if ( ! function_exists( 'oinput' ) ) {
 
 					// формирование элемента
 					$atts['attributes'] = $atts['placeholder']
-						. $atts['style']
-						. $atts['checked']
-						. $atts['multiple']
-						. $atts['readonly']
-						. $atts['disabled']
-						. $atts['required']
-						. $atts['autofocus']
-						. $atts['autofocus_at_end']
-						. $atts['data']
-						. $atts['attributes'];
+					                      . $atts['style']
+					                      . $atts['checked']
+					                      . $atts['multiple']
+					                      . $atts['readonly']
+					                      . $atts['disabled']
+					                      . $atts['required']
+					                      . $atts['autofocus']
+					                      . $atts['autofocus_at_end']
+					                      . $atts['data']
+					                      . $atts['attributes'];
 				}
 			}
 
@@ -712,24 +712,24 @@ function get_oitemplate( $template, $atts ) {
  * @return string
  */
 function get_html( $atts, $base_class = '' ) {
-	$atts = shortcode_atts( [
+	$atts = shortcode_atts( array(
 		'tag'     => 'div',
-		'atts'    => [
+		'atts'    => array(
 			'class' => '&',
-		],
+		),
 		'content' => '',
-	], $atts );
+	), $atts );
 
-	$mono   = [
+	$mono   = array(
 		'br',
 		'hr',
 		'input',
 		'meta',
 		'link',
 		'img',
-	];
+	);
 	$out    = '';
-	$object = [];
+	$object = array();
 
 	// перебор содержимого массива
 	foreach ( $atts as $key => $value ) {
@@ -759,7 +759,7 @@ function get_html( $atts, $base_class = '' ) {
 
 					// если значение является массивом
 					if ( is_array( $value ) ) {
-						$attributes = [];
+						$attributes = array();
 
 						// атрибуты выстраиваются в строку
 						foreach ( $value as $name => $val ) {
@@ -802,7 +802,7 @@ function get_html( $atts, $base_class = '' ) {
 	}
 
 	if ( empty( $atts['atts'] ) ) {
-		$atts['atts'] = [];
+		$atts['atts'] = array();
 	}
 	// перебор элементов и дописывание закрывающих частей
 	foreach ( $atts as $key => $value ) {
@@ -826,12 +826,12 @@ function get_html( $atts, $base_class = '' ) {
 	}
 
 	// порядок составления элементов
-	$order = [
+	$order = array(
 		'tag',
 		'atts',
 		'content',
 		'end_tag',
-	];
+	);
 	foreach ( $order as $key ) {
 		if ( ! empty( $object[ $key ] ) ) {
 			$out .= implode( '', $object[ $key ] );
